@@ -3,3 +3,6 @@
 wget https://www.redhat.com/security/data/metrics/rhsamapcpe.txt
 
 cat rhsamapcpe.txt | grep php | grep -o 'CVE\-[0-9][0-9][0-9][0-9]\-[0-9][0-9][0-9][0-9]' | sort | uniq
+
+cat gitlog.txt | grep -o 'CVE\-[0-9][0-9][0-9][0-9]\-[0-9][0-9][0-9][0-9]' | sort | uniq > git-cves.txt
+
