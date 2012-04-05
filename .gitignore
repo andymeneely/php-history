@@ -3,3 +3,4 @@ target/*
 *.class
 build.properties
 tomcathistory.properties
+phphistory.properties
