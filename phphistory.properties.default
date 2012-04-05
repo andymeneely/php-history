@@ -1,7 +1,7 @@
 # Copy and paste this file to build.properties for each of your local installations
 # Edit for yourself as needed
 
-history.datadir=C:/data/php
+history.datadir=C:/data/php-history
 
 # This is your Google account password - so make sure this doesn't get publicized!!
 # I *strongly* recommend using application-specific passwords for this, or even just a separate username
@@ -9,19 +9,19 @@ google.username=???
 google.password=???
 
 history.cve2files.local=PHP Vulnerabilities - CVEs to Fixes.csv
-history.cve2files.googledoc=
+history.cve2files.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gid=0
 
-history.groundedtheory.local=PHP Vulnerabilities Grounded Theory Study - Resolution.csv
-history.groundedtheory.googledoc=
+history.groundedtheory.local=PHP Vulnerabilities - Grounded Theory.csv
+history.groundedtheory.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gid=3
 
 history.cves.local=PHP Vulnerabilities - CVEs.csv
-history.cves.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gid=0
+history.cves.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gid=4
 
-history.svnlogxml=
+history.gitlog=php-full-gitlog.txt
 
-history.filelisting.v5=
+history.filelisting.v5_3_0=php-file-listing-5_3_0.txt
 
-history.sloc.v5=
+history.sloc.v5_3_0=sloc5.3.0.csv
 
 history.dbuser=root
 history.dbpw=root
