@@ -6,3 +6,21 @@ cat rhsamapcpe.txt | grep php | grep -o 'CVE\-[0-9][0-9][0-9][0-9]\-[0-9][0-9][0
 
 cat gitlog.txt | grep -o 'CVE\-[0-9][0-9][0-9][0-9]\-[0-9][0-9][0-9][0-9]' | sort | uniq > git-cves.txt
 
+git clone http://git.php.net/repository/php-src.git
+
+# Checkout v5.3.0 to get the file listing
+git checkout php-5.3.0
+
+# Get the file listing - just excluding the git directory
+find | grep -v './.git/*' > ../php-file-listing-5_3_0.txt
+
+# To get SLOC counts, use the cloc script
+# http://sourceforge.net/projects/cloc/
+# This dumps the file-level information into an SQLITE database, and then we dump that out to CSVs
+$ perl cloc-1.55.pl --sql=1 php-src/ | sqlite3 php_sloc_5.3.0.db
+
+# And then dump from that database out to a csv file
+$ sqlite3 sloc5.3.0.db
+> .mode csv
+> .output sloc5.3.0.csv 
+> select substr(File,9),Language,nCode from t;
