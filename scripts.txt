@@ -11,8 +11,8 @@ git clone http://git.php.net/repository/php-src.git
 # Checkout v5.3.0 to get the file listing
 git checkout php-5.3.0
 
-# Get the entire git log
-git log --stat > ../php-gitlog.txt
+# Get the entire git log, in our own special format
+git-log --pretty=format:":::%n%H%n%an%n%ae%n%ad%n%P%n%s%n%b" --stat --ignore-space-change > ../php-gitlog.txt
 
 # Get the file listing - just excluding the git directory
 find | grep -v './.git/*' > ../php-file-listing-5_3_0.txt

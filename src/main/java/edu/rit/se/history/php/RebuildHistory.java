@@ -12,6 +12,7 @@ import org.chaoticbits.devactivity.PropsLoader;
 
 import com.google.gdata.util.ServiceException;
 
+import edu.rit.se.history.php.parser.GitLogParser;
 import edu.rit.se.history.php.scrapers.GoogleDocExport;
 
 public class RebuildHistory {
@@ -37,13 +38,14 @@ public class RebuildHistory {
 	public void run() throws Exception {
 		// downloadGoogleDocs(props);
 		rebuildSchema(dbUtil);
-		// // loadSVNXML(dbUtil, props);
-		// // filterSVNLog(dbUtil, props);
+		loadGitLog(dbUtil, props);
+		// loadSVNXML(dbUtil, props);
+		// filterSVNLog(dbUtil, props);
 		// loadFileListing(dbUtil, props);
 		// loadVulnerabilitiesToFiles(dbUtil, props);
 		// loadGroundedTheoryResults(dbUtil, props);
 		// loadCVEs(dbUtil, props);
-		// optimizeTables(dbUtil);
+		optimizeTables(dbUtil);
 		// loadSLOC(dbUtil, props);
 		// buildAnalysis(dbUtil, props);
 		log.info("Done.");
@@ -67,8 +69,10 @@ public class RebuildHistory {
 	private void downloadGoogleDocs(Properties props) throws IOException, ServiceException {
 		log.info("Downloading the latest GoogleDocs...");
 		GoogleDocExport export = new GoogleDocExport();
-		export.add(props.getProperty("history.cves.googledoc"), new File(datadir, props.getProperty("history.cves.local")));
-		export.add(props.getProperty("history.cve2files.googledoc"), new File(datadir, props.getProperty("history.cve2files.local")));
+		export.add(props.getProperty("history.cves.googledoc"),
+				new File(datadir, props.getProperty("history.cves.local")));
+		export.add(props.getProperty("history.cve2files.googledoc"),
+				new File(datadir, props.getProperty("history.cve2files.local")));
 		export.add(props.getProperty("history.groundedtheory.googledoc"),
 				new File(datadir, props.getProperty("history.groundedtheory.local")));
 		export.downloadCSVs(props.getProperty("google.username"), props.getProperty("google.password"));
@@ -78,6 +82,13 @@ public class RebuildHistory {
 		log.info("Rebuilding database schema...");
 		dbUtil.executeSQLFile("sql/createTables.sql");
 	}
+
+	private void loadGitLog(DBUtil dbUtil, Properties props) throws Exception {
+		log.info("Parsing git log...");
+		new GitLogParser().parse(dbUtil,
+				new File(props.getProperty("history.datadir"), props.getProperty("history.gitlog")));
+	}
+
 	//
 	// private void loadSVNXML(DBUtil dbUtil, Properties props) throws Exception
 	// {
@@ -143,12 +154,11 @@ public class RebuildHistory {
 	// props.getProperty("history.cve2files.local")));
 	// }
 	//
-	// private void optimizeTables(DBUtil dbUtil) throws FileNotFoundException,
-	// SQLException, IOException {
-	// log.info("Optimizing tables...");
-	// dbUtil.executeSQLFile("sql/optimizeTables.sql");
-	// }
-	//
+	private void optimizeTables(DBUtil dbUtil) throws FileNotFoundException, SQLException, IOException {
+		log.info("Optimizing tables...");
+		dbUtil.executeSQLFile("sql/optimizeTables.sql");
+	}
+
 	// private void buildAnalysis(DBUtil dbUtil, Properties props) throws
 	// FileNotFoundException,
 	// SQLException, IOException {

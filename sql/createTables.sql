@@ -1,5 +1,7 @@
 DROP VIEW IF EXISTS RepoLog;
 DROP TABLE IF EXISTS Filepaths;
+DROP TABLE IF EXISTS GitLog;
+DROP TABLE IF EXISTS GitLogFiles;
 DROP TABLE IF EXISTS GitBlames;
 DROP TABLE IF EXISTS GitDiffHunks;
 DROP TABLE IF EXISTS CVE;
@@ -30,19 +32,21 @@ CREATE TABLE GitDiffHunks(
 
 CREATE TABLE GitLog (
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(40) NOT NULL,
+  Commit VARCHAR(40) NOT NULL,
+  Parent VARCHAR(40) NOT NULL,
   AuthorName varchar(45) default NULL,
   AuthorEmail varchar(45) default NULL,
   AuthorDate TIMESTAMP,
-  Message longtext,
+  Subject VARCHAR(5000) NOT NULL,
+  Body longtext NOT NULL,
+  NumSignedOffBys INTEGER DEFAULT 0,
   PRIMARY KEY  (ID)
 )ENGINE=MyISAM;
 
 CREATE TABLE GitLogFiles (
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(40) NOT NULL,
+  Commit VARCHAR(40) NOT NULL,
   Filepath varchar(500) NOT NULL,
-  Action varchar(1),
   NumChanges int(10) unsigned,
   LinesInserted int(10) unsigned,
   LinesDeleted int(10) unsigned,
@@ -51,9 +55,9 @@ CREATE TABLE GitLogFiles (
 ) ENGINE=MyISAM;
 
 CREATE VIEW RepoLog AS
-	SELECT l.id, l.revision, l.authorname, l.authordate, l.message, lf.filepath, lf.Action 
+	SELECT l.id, l.commit, l.authorname, l.authordate, l.body, lf.filepath 
 	FROM GitLog l, GitLogFiles lf
-  		WHERE lf.revision=l.revision;
+  		WHERE lf.commit=l.commit;
 
 CREATE TABLE CVE (
   ID int(10) unsigned NOT NULL auto_increment,
