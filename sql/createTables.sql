@@ -21,7 +21,7 @@ CREATE TABLE GitBlames(
 
 CREATE TABLE GitDiffHunks(
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(40) NOT NULL,
+  Commit VARCHAR(40) NOT NULL,
   Filepath VARCHAR(500) NOT NULL,
   LineDeletedStart INTEGER NOT NULL,
   LineDeletedNumber INTEGER NOT NULL,

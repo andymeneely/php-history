@@ -12,6 +12,7 @@ import org.chaoticbits.devactivity.PropsLoader;
 
 import com.google.gdata.util.ServiceException;
 
+import edu.rit.se.history.php.parser.GitDiffHunkParser;
 import edu.rit.se.history.php.parser.GitLogParser;
 import edu.rit.se.history.php.scrapers.GoogleDocExport;
 
@@ -38,7 +39,8 @@ public class RebuildHistory {
 	public void run() throws Exception {
 		// downloadGoogleDocs(props);
 		rebuildSchema(dbUtil);
-		loadGitLog(dbUtil, props);
+		// loadGitLog(dbUtil, props);
+		loadGitDiffHunks(dbUtil, props);
 		// loadSVNXML(dbUtil, props);
 		// filterSVNLog(dbUtil, props);
 		// loadFileListing(dbUtil, props);
@@ -86,7 +88,13 @@ public class RebuildHistory {
 	private void loadGitLog(DBUtil dbUtil, Properties props) throws Exception {
 		log.info("Parsing git log...");
 		new GitLogParser().parse(dbUtil,
-				new File(props.getProperty("history.datadir"), props.getProperty("history.gitlog")));
+				new File(props.getProperty("history.datadir"), props.getProperty("history.git.log")));
+	}
+
+	private void loadGitDiffHunks(DBUtil dbUtil, Properties props) throws Exception {
+		log.info("Parsing git diff hunks...");
+		new GitDiffHunkParser().parse(dbUtil,
+				new File(props.getProperty("history.datadir"), props.getProperty("history.git.diffhunks")));
 	}
 
 	//
