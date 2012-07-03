@@ -1,23 +1,46 @@
 DROP VIEW IF EXISTS RepoLog;
 DROP TABLE IF EXISTS Filepaths;
+DROP TABLE IF EXISTS GitBlames;
+DROP TABLE IF EXISTS GitDiffHunks;
 DROP TABLE IF EXISTS CVE;
 DROP TABLE IF EXISTS CVESVNFix;
 DROP TABLE IF EXISTS CVENonSVNFix;
 DROP TABLE IF EXISTS CVEGroundedTheory;
 DROP TABLE IF EXISTS CVEGroundedTheoryAssets;
 
-CREATE TABLE SVNLog (
+CREATE TABLE GitBlames(
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(20) NOT NULL,
+  Revision VARCHAR(40) NOT NULL,
+  Filepath VARCHAR(500) NOT NULL,
+  LineNumber INTEGER NOT NULL,
+  LineRevision VARCHAR(40) NOT NULL,
+  PRIMARY KEY (ID)
+)ENGINE=MyISAM;
+
+CREATE TABLE GitDiffHunks(
+  ID int(10) unsigned NOT NULL auto_increment,
+  Revision VARCHAR(40) NOT NULL,
+  Filepath VARCHAR(500) NOT NULL,
+  LineDeletedStart INTEGER NOT NULL,
+  LineDeletedNumber INTEGER NOT NULL,
+  LineAddedStart INTEGER NOT NULL,
+  LineAddedNumber INTEGER NOT NULL,
+  PRIMARY KEY  (ID)
+)ENGINE=MyISAM;
+
+CREATE TABLE GitLog (
+  ID int(10) unsigned NOT NULL auto_increment,
+  Revision VARCHAR(40) NOT NULL,
   AuthorName varchar(45) default NULL,
+  AuthorEmail varchar(45) default NULL,
   AuthorDate TIMESTAMP,
   Message longtext,
   PRIMARY KEY  (ID)
 )ENGINE=MyISAM;
 
-CREATE TABLE SVNLogFiles (
+CREATE TABLE GitLogFiles (
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(20) NOT NULL,
+  Revision VARCHAR(40) NOT NULL,
   Filepath varchar(500) NOT NULL,
   Action varchar(1),
   NumChanges int(10) unsigned,
@@ -29,7 +52,7 @@ CREATE TABLE SVNLogFiles (
 
 CREATE VIEW RepoLog AS
 	SELECT l.id, l.revision, l.authorname, l.authordate, l.message, lf.filepath, lf.Action 
-	FROM SVNLog l, SVNLogFiles lf
+	FROM GitLog l, GitLogFiles lf
   		WHERE lf.revision=l.revision;
 
 CREATE TABLE CVE (
@@ -59,13 +82,6 @@ CREATE TABLE CVEGroundedTheory (
   Regression ENUM('Yes', 'No') NOT NULL,
   SourceCode ENUM('Yes', 'No') NOT NULL,
   ConfigFile ENUM('Yes', 'No') NOT NULL,
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM;
-
-CREATE TABLE CVEGroundedTheoryAssets (
-  ID int(10) unsigned NOT NULL auto_increment,
-  CVE VARCHAR(15) NOT NULL,
-  Asset VARCHAR(50) NOT NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM;
 
