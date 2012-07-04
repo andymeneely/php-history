@@ -17,7 +17,9 @@ history.groundedtheory.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gi
 history.cves.local=PHP Vulnerabilities - CVEs.csv
 history.cves.googledoc=0AutMI5gkPUdLdDFoMFNYOENQSHJCanh2Z2o2ZEJnNmc&gid=4
 
-history.gitlog=php-full-gitlog.txt
+history.git.log=php-full-gitlog.txt
+history.git.diffhunks=git-log-diffhunks.txt
+history.git.blames=php-blames.txt.gz
 
 history.filelisting.v5_3_0=php-file-listing-5_3_0.txt
 
