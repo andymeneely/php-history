@@ -12,10 +12,10 @@ DROP TABLE IF EXISTS CVEGroundedTheoryAssets;
 
 CREATE TABLE GitBlames(
   ID int(10) unsigned NOT NULL auto_increment,
-  Revision VARCHAR(40) NOT NULL,
+  Commit VARCHAR(40) NOT NULL,
   Filepath VARCHAR(500) NOT NULL,
   LineNumber INTEGER NOT NULL,
-  LineRevision VARCHAR(40) NOT NULL,
+  LineCommit VARCHAR(40) NOT NULL,
   PRIMARY KEY (ID)
 )ENGINE=MyISAM;
 
