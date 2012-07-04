@@ -14,6 +14,7 @@ import org.chaoticbits.devactivity.PropsLoader;
 
 import com.google.gdata.util.ServiceException;
 
+import edu.rit.se.history.php.analysis.InteractionChurn;
 import edu.rit.se.history.php.parser.GitBlameParser;
 import edu.rit.se.history.php.parser.GitDiffHunkParser;
 import edu.rit.se.history.php.parser.GitLogParser;
@@ -42,9 +43,10 @@ public class RebuildHistory {
 	public void run() throws Exception {
 		// downloadGoogleDocs(props);
 		rebuildSchema(dbUtil);
-		// loadGitLog(dbUtil, props);
-		// loadGitDiffHunks(dbUtil, props);
+		loadGitLog(dbUtil, props);
+		loadGitDiffHunks(dbUtil, props);
 		loadGitBlames(dbUtil, props);
+//		computeInteractionChurn(dbUtil);
 		// loadSVNXML(dbUtil, props);
 		// filterSVNLog(dbUtil, props);
 		// loadFileListing(dbUtil, props);
@@ -99,6 +101,12 @@ public class RebuildHistory {
 		log.info("Loading git blames...");
 		new GitBlameParser().parse(dbUtil,
 				new GZIPInputStream(new FileInputStream(new File(props.getProperty("history.datadir"), props.getProperty("history.git.blames")))));
+
+	}
+
+	private void computeInteractionChurn(DBUtil dbUtil) throws Exception {
+		log.info("Computing interaction churn...");
+		new InteractionChurn().compute(dbUtil);
 
 	}
 

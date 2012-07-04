@@ -50,7 +50,9 @@ CREATE TABLE GitLogFiles (
   NumChanges int(10) unsigned,
   LinesInserted int(10) unsigned,
   LinesDeleted int(10) unsigned,
-  LinesNew int(10) unsigned,
+  LinesDeletedSelf int(10) unsigned,
+  LinesDeletedOther int(10) unsigned,
+  AuthorsAffected int(10) unsigned,
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM;
 

@@ -35,8 +35,8 @@ public class GitLogParser {
 		PreparedStatement ps = conn.prepareStatement("INSERT INTO GitLog(Commit, AuthorName, AuthorEmail, "
 				+ "AuthorDate, Parent, Subject, Body, NumSignedOffBys) " + "VALUES (?,?,?,?,?,?,?,?)");
 		PreparedStatement ps2 = conn
-				.prepareStatement("INSERT INTO GitLogFiles(Commit,Filepath,NumChanges,LinesInserted,LinesDeleted,LinesNew) "
-						+ "VALUES (?,?,?,?,?,?)");
+				.prepareStatement("INSERT INTO GitLogFiles(Commit,Filepath,NumChanges,LinesInserted,LinesDeleted) "
+						+ "VALUES (?,?,?,?,?)");
 		Scanner scanner = new Scanner(csv);
 		log.debug("Scanning the log...");
 		scanner.nextLine();
@@ -76,7 +76,7 @@ public class GitLogParser {
 			ps.addBatch();
 
 		}
-		log.debug("\tExecuting batch insert...");
+		log.debug("Executing batch insert...");
 		ps.executeBatch();
 		ps2.executeBatch();
 		scanner.close();
@@ -93,7 +93,6 @@ public class GitLogParser {
 			int pipeLoc = fileChange.indexOf("|");
 			int numInsertions = countOccurrences(fileChange.substring(pipeLoc), '+');
 			int numDeletions = countOccurrences(fileChange.substring(pipeLoc), '-');
-			int linesNew = Math.max(numInsertions - numDeletions, 0);
 			int numChanges;
 			try {
 				numChanges = Integer.valueOf(fileChange.substring(pipeLoc + 1, pipeLoc + 6).trim());
@@ -109,7 +108,6 @@ public class GitLogParser {
 			ps2.setInt(3, numChanges);
 			ps2.setInt(4, numInsertions);
 			ps2.setInt(5, numDeletions);
-			ps2.setInt(6, linesNew);
 			ps2.addBatch();
 		}
 	}
