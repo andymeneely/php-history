@@ -14,10 +14,10 @@ import org.chaoticbits.devactivity.PropsLoader;
 
 import com.google.gdata.util.ServiceException;
 
-import edu.rit.se.history.php.analysis.InteractionChurn;
 import edu.rit.se.history.php.parser.GitBlameParser;
 import edu.rit.se.history.php.parser.GitDiffHunkParser;
 import edu.rit.se.history.php.parser.GitLogParser;
+import edu.rit.se.history.php.parser.InteractionChurnParser;
 import edu.rit.se.history.php.scrapers.GoogleDocExport;
 
 public class RebuildHistory {
@@ -44,17 +44,15 @@ public class RebuildHistory {
 		// downloadGoogleDocs(props);
 		rebuildSchema(dbUtil);
 		loadGitLog(dbUtil, props);
-		loadGitDiffHunks(dbUtil, props);
-		loadGitBlames(dbUtil, props);
-//		computeInteractionChurn(dbUtil);
 		// loadSVNXML(dbUtil, props);
 		// filterSVNLog(dbUtil, props);
 		// loadFileListing(dbUtil, props);
 		// loadVulnerabilitiesToFiles(dbUtil, props);
+		// loadSLOC(dbUtil, props);
 		// loadGroundedTheoryResults(dbUtil, props);
 		// loadCVEs(dbUtil, props);
 		optimizeTables(dbUtil);
-		// loadSLOC(dbUtil, props);
+		loadInteractionChurn(dbUtil, props);
 		// buildAnalysis(dbUtil, props);
 		log.info("Done.");
 	}
@@ -68,7 +66,8 @@ public class RebuildHistory {
 
 	private DBUtil setUpDB(Properties props) throws ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
-		DBUtil dbUtil = new DBUtil(props.getProperty("history.dbuser"), props.getProperty("history.dbpw"), props.getProperty("history.dburl"));
+		DBUtil dbUtil = new DBUtil(props.getProperty("history.dbuser"), props.getProperty("history.dbpw"),
+				props.getProperty("history.dburl"));
 		return dbUtil;
 	}
 
@@ -76,9 +75,12 @@ public class RebuildHistory {
 	private void downloadGoogleDocs(Properties props) throws IOException, ServiceException {
 		log.info("Downloading the latest GoogleDocs...");
 		GoogleDocExport export = new GoogleDocExport();
-		export.add(props.getProperty("history.cves.googledoc"), new File(datadir, props.getProperty("history.cves.local")));
-		export.add(props.getProperty("history.cve2files.googledoc"), new File(datadir, props.getProperty("history.cve2files.local")));
-		export.add(props.getProperty("history.groundedtheory.googledoc"), new File(datadir, props.getProperty("history.groundedtheory.local")));
+		export.add(props.getProperty("history.cves.googledoc"),
+				new File(datadir, props.getProperty("history.cves.local")));
+		export.add(props.getProperty("history.cve2files.googledoc"),
+				new File(datadir, props.getProperty("history.cve2files.local")));
+		export.add(props.getProperty("history.groundedtheory.googledoc"),
+				new File(datadir, props.getProperty("history.groundedtheory.local")));
 		export.downloadCSVs(props.getProperty("google.username"), props.getProperty("google.password"));
 	}
 
@@ -89,25 +91,14 @@ public class RebuildHistory {
 
 	private void loadGitLog(DBUtil dbUtil, Properties props) throws Exception {
 		log.info("Parsing git log...");
-		new GitLogParser().parse(dbUtil, new File(props.getProperty("history.datadir"), props.getProperty("history.git.log")));
+		new GitLogParser().parse(dbUtil,
+				new File(props.getProperty("history.datadir"), props.getProperty("history.git.log")));
 	}
 
-	private void loadGitDiffHunks(DBUtil dbUtil, Properties props) throws Exception {
-		log.info("Parsing git diff hunks...");
-		new GitDiffHunkParser().parse(dbUtil, new File(props.getProperty("history.datadir"), props.getProperty("history.git.diffhunks")));
-	}
-
-	private void loadGitBlames(DBUtil dbUtil, Properties props) throws Exception {
-		log.info("Loading git blames...");
-		new GitBlameParser().parse(dbUtil,
-				new GZIPInputStream(new FileInputStream(new File(props.getProperty("history.datadir"), props.getProperty("history.git.blames")))));
-
-	}
-
-	private void computeInteractionChurn(DBUtil dbUtil) throws Exception {
-		log.info("Computing interaction churn...");
-		new InteractionChurn().compute(dbUtil);
-
+	private void loadInteractionChurn(DBUtil dbUtil, Properties props) throws Exception {
+		log.info("Loading interaction churn...");
+		new InteractionChurnParser().parse(dbUtil,
+				new File(props.getProperty("history.datadir"), props.getProperty("history.git.interactionchurn")));
 	}
 
 	//

@@ -1,11 +1,10 @@
 CREATE UNIQUE INDEX CVEIndex USING BTREE ON CVE(CVE);
 CREATE UNIQUE INDEX CVEGroundedTheoryIndex USING BTREE ON CVEGroundedTheory(CVE);
 CREATE INDEX FilepathIndex USING BTREE ON Filepaths(Filepath);
-CREATE INDEX GitBlameFilepath USING BTREE ON GitBlames(Filepath);
-CREATE INDEX GitBlameRevision USING BTREE ON GitBlames(Commit);
-CREATE INDEX GitBlameFilepathRevision USING BTREE ON GitBlames(Filepath,Commit);
-CREATE INDEX GitBlameFilepathRevisionLineNumber USING BTREE ON GitBlames(Filepath,Commit,LineNumber);
 CREATE INDEX GitLogCommit USING BTREE ON GitLog(Commit);
+CREATE INDEX GitLogFilesCommitFilepath USING BTREE ON GitLogFiles(Commit, Filepath);
+CREATE INDEX GitLogFilesCommit USING BTREE ON GitLogFiles(Commit);
+CREATE INDEX GitLogFilesFilepath USING BTREE ON GitLogFiles(Filepath);
 
 OPTIMIZE TABLE SVNLog;
 OPTIMIZE TABLE SVNLogFiles;
@@ -13,6 +12,5 @@ OPTIMIZE TABLE Filepaths;
 OPTIMIZE TABLE CVE;
 OPTIMIZE TABLE CVESVNFix;
 OPTIMIZE TABLE CVEGroundedTheory;
-OPTIMIZE TABLE GitBlames;
-OPTIMIZE TABLE GitDiffHunks;
 OPTIMIZE TABLE GitLog;
+OPTIMIZE TABLE GitLogFiles;

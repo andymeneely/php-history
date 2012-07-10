@@ -2,33 +2,11 @@ DROP VIEW IF EXISTS RepoLog;
 DROP TABLE IF EXISTS Filepaths;
 DROP TABLE IF EXISTS GitLog;
 DROP TABLE IF EXISTS GitLogFiles;
-DROP TABLE IF EXISTS GitBlames;
-DROP TABLE IF EXISTS GitDiffHunks;
 DROP TABLE IF EXISTS CVE;
 DROP TABLE IF EXISTS CVESVNFix;
 DROP TABLE IF EXISTS CVENonSVNFix;
 DROP TABLE IF EXISTS CVEGroundedTheory;
 DROP TABLE IF EXISTS CVEGroundedTheoryAssets;
-
-CREATE TABLE GitBlames(
-  ID int(10) unsigned NOT NULL auto_increment,
-  Commit VARCHAR(40) NOT NULL,
-  Filepath VARCHAR(500) NOT NULL,
-  LineNumber INTEGER NOT NULL,
-  LineCommit VARCHAR(40) NOT NULL,
-  PRIMARY KEY (ID)
-)ENGINE=MyISAM;
-
-CREATE TABLE GitDiffHunks(
-  ID int(10) unsigned NOT NULL auto_increment,
-  Commit VARCHAR(40) NOT NULL,
-  Filepath VARCHAR(500) NOT NULL,
-  LineDeletedStart INTEGER NOT NULL,
-  LineDeletedNumber INTEGER NOT NULL,
-  LineAddedStart INTEGER NOT NULL,
-  LineAddedNumber INTEGER NOT NULL,
-  PRIMARY KEY  (ID)
-)ENGINE=MyISAM;
 
 CREATE TABLE GitLog (
   ID int(10) unsigned NOT NULL auto_increment,
