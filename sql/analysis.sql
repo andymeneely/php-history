@@ -3,7 +3,7 @@ DROP VIEW IF EXISTS Results;
 
 CREATE VIEW Churn AS 
 SELECT  Filepath,
-		Sum(NumChanges) SumNumChanges,
+		Sum(LinesInserted+LinesDeletedOther+LinesDeletedSelf) SumNumChanges,
 		Count(Commit) NumCommits,
         Sum(LinesInserted) SumLinesInserted, 
         Sum(LinesDeletedOther+LinesDeletedSelf) SumLinesDeleted,
@@ -19,6 +19,6 @@ SELECT  c.*,
 		c.SumNumChanges/f.SLOC ChurnPerSLOC,
 		SumAuthorsAffected/NumCommits AuthorsAffectedPerCommit,
         SumLinesDeletedOther/NumCommits LinesDeletedOtherPerCommit,
-        (SumLinesDeletedOther/SumLinesDeleted)/NumCommits PercLinesDeletedOtherPerCommit,
+        (SumLinesDeletedOther/(SumLinesDeleted+SumLinesInserted))/NumCommits PercLinesDeletedOtherPerCommit,
 		f.Vulnerable 
 FROM Churn c INNER JOIN Filepaths f ON (c.filepath=f.filepath) ; 
