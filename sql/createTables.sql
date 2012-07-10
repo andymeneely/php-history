@@ -69,19 +69,12 @@ CREATE TABLE CVEGroundedTheory (
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM;
 
-CREATE TABLE CVESVNFix (
-  ID int(10) unsigned NOT NULL auto_increment,
-  CVE VARCHAR(15) NOT NULL,
-  SVNRevision INTEGER,
-  TomcatRelease VARCHAR(5) NOT NULL,
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM;
-
 CREATE TABLE Filepaths (
   ID int(10) unsigned NOT NULL auto_increment,
   Filepath varchar(500) NOT NULL,
-  TomcatRelease varchar(5) NOT NULL,
+  PHPRelease varchar(5) NOT NULL,
   SLOCType VARCHAR(100),
   SLOC INTEGER,
+  Vulnerable ENUM('Yes', 'No') DEFAULT 'No',
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM;
